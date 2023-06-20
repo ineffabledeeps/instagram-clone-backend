@@ -1,4 +1,4 @@
-# Getting Started with instagram-clone-backendr
+# Getting Started with instagram-clone-backend
 
 This project was bootstrapped with [Express Generator](https://expressjs.com/en/starter/generator.html).
 
