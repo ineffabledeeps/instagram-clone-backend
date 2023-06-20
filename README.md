@@ -1,8 +1,6 @@
-# instagram-clone-backend
+# Getting Started with instagram-clone-backendr
 
-# Getting Started with Express-Generator
-
-This project was bootstrapped with [Create React App](https://expressjs.com/en/starter/generator.html).
+This project was bootstrapped with [Express Generator](https://expressjs.com/en/starter/generator.html).
 
 ## Available Scripts
 
