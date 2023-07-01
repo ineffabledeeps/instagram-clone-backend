@@ -1,11 +1,21 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+require('dotenv').config();
+const createError = require('http-errors');
+const cors = require('cors');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
+const hpp = require('hpp');
+const session = require('express-session');
+const genuuid = require('./utilities/auth')
+const express = require('express');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const logger = require('morgan');
+const multer = require('multer');
+
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const setupRouter = require('./routes/setup');
+const authRouter = require('./routes/auth');
 
 var app = express();
 
@@ -13,14 +23,49 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use(cors({
+  origin : "http://localhost:3000", // (Whatever your frontend url is) 
+  credentials: true, // <= Accept credentials (cookies) sent by the client
+}))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(helmet());
+app.use(hpp());
+app.use(session({
+  genid: function() {
+    return genuuid() // use UUIDs for session IDs
+  },
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 1000 * 60 * 60 *  12, httpOnly:true }
+}))
+
+// if (app.get('env') === 'production') {
+//   app.set('trust proxy', 1) // trust first proxy
+//   sess.cookie.secure = true // serve secure cookies
+// }
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/setup', setupRouter);
+app.use('/auth', authRouter)
+//config multers
+
+const storage = multer.diskStorage({
+  destination:function(req,file,cb){
+    cb(null,"public/images");
+  },
+  filename: function(req,file,cb){
+    const filename = file.mimetype.includes('image') ? `${file.fieldname}-${Date.now()}.jpg` : `${file.fieldname}-${Date.now()}.mp4`
+    cb(null,filename);
+  }
+})
+
+const upload = multer({storage:storage});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
