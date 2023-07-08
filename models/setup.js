@@ -241,20 +241,20 @@ const modifyDatabaseModel = async function modifyDatabase() {
       validator: {
         $jsonSchema: {
           bsonType: "object",
-          title: "User object Validation",
-          required: ["firstName", "lastName", "email", "password"],
+          title: "User object Validation v2",
+          required: ["fullName", "username", "password"],
           properties: {
-            firstName: {
+            fullName: {
               bsonType: "string",
-              description: "'firstName' must be a string",
-            },
-            lastName: {
-              bsonType: "string",
-              description: "'lastName' must be a string",
+              description: "'fullName' must be a string",
             },
             username: {
               bsonType: "string",
               description: "'username' must be a string",
+            },
+            mobileNumber:{
+              bsonType: "string",
+              description:"'mobile number must be a string'"
             },
             email: {
               bsonType: "string",

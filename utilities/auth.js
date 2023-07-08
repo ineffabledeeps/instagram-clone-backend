@@ -6,4 +6,11 @@ const genuuid = function(){
     return secret;
 }
 
-module.exports = genuuid;
+const encryptPwd = function(password){
+    let salt = uuidv5("null","user")
+    let v5string = uuidv5(password,salt)
+    let finalString = uuidv5(password,v5string)
+    return finalString
+}
+
+module.exports = {genuuid,encryptPwd};

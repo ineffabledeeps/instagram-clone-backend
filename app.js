@@ -6,11 +6,10 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const session = require('express-session');
-const genuuid = require('./utilities/auth')
+const {genuuid} = require('./utilities/auth')
 const express = require('express');
 
 const logger = require('morgan');
-const multer = require('multer');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -53,19 +52,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/setup', setupRouter);
 app.use('/auth', authRouter)
-//config multers
-
-const storage = multer.diskStorage({
-  destination:function(req,file,cb){
-    cb(null,"public/images");
-  },
-  filename: function(req,file,cb){
-    const filename = file.mimetype.includes('image') ? `${file.fieldname}-${Date.now()}.jpg` : `${file.fieldname}-${Date.now()}.mp4`
-    cb(null,filename);
-  }
-})
-
-const upload = multer({storage:storage});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

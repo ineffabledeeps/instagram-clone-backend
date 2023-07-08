@@ -8,7 +8,7 @@ const {
   addUserSessionModel,
   deleteUserSessionModel
 } = require("../models/users");
-const session = require("express-session");
+const {encryptPwd} = require("../utilities/auth");
 
 // router.use(async (req,res,next)=>{
 //   if(req.session.user){
@@ -24,14 +24,6 @@ router.get("/:id", async function (req, res, next) {
     var result = await getUserByEmailModel(req.params.id);
   } else {
     var result = await getUserByIdModel(req.params.id);
-  }
-  res.json(result);
-});
-
-router.post("/create", async function (req, res) {
-  let result = await createUserModel(req.body);
-  if (result.hasOwnProperty("errorCode")) {
-    res.statusCode = result.errorCode;
   }
   res.json(result);
 });
