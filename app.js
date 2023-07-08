@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const {genuuid} = require('./utilities/auth')
 const express = require('express');
 
@@ -37,6 +38,9 @@ app.use(session({
     return genuuid() // use UUIDs for session IDs
   },
   secret: process.env.SECRET,
+  store: MongoStore.create({
+    mongoUrl:process.env.MONGO_URI
+  }),
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 1000 * 60 * 60 *  12, httpOnly:true }
