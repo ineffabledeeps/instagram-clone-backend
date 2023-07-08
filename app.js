@@ -24,7 +24,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(cors({
-  origin : "http://localhost:3000", // (Whatever your frontend url is) 
+  origin : "https://effulgent-monstera-ce581e.netlify.app", // (Whatever your frontend url is) 
   credentials: true, // <= Accept credentials (cookies) sent by the client
 }))
 app.use(logger('dev'));
